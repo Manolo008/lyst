@@ -10,6 +10,12 @@ function authHeaders(token) {
 }
 
 async function handleResponse(res) {
+  if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('lyst_token')
+    localStorage.removeItem('lyst_user')
+    window.location.href = '/'
+    return
+  }
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.message || `API fout: ${res.status}`)
