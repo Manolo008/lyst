@@ -18,8 +18,8 @@ Lyst is een notitie-applicatie gebouwd als eindopdracht voor de Leerlijn Fronten
 
 **Kernfunctionaliteiten:**
 
-- **Registreren & inloggen** via de NOVI Educational Backend (JWT-authenticatie)
-- **Notities beheren** – aanmaken, bekijken, bewerken en verwijderen via de NOVI Dynamic API
+- **Registreren & inloggen** via de NOVI Dynamic API (JWT-authenticatie)
+- **Notities beheren** – aanmaken, bekijken, bewerken en verwijderen
 - **Filteren & zoeken** – notities doorzoeken op tekst, label en datum
 - **Reminders** – herinneringen instellen en bekijken per tijdvak (vandaag / deze week)
 
@@ -59,26 +59,22 @@ npm install
 
 ### 3. Omgevingsvariabelen instellen
 
-Kopieer het voorbeeld-bestand en vul je eigen sleutels in:
+Kopieer het voorbeeld-bestand:
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` en vul de volgende waarden in:
+Het `.env`-bestand bevat al de juiste waarden voor dit project:
 
 ```env
-# NOVI Educational Backend – voor authenticatie (register/login)
-VITE_AUTH_URL=https://frontend-educational-backend.herokuapp.com
-
-# NOVI Dynamic API – voor notities opslaan
-# Registreer je project op https://novi.datavortex.nl
-VITE_NOTES_API_URL=https://api.datavortex.nl/jouw-projectnaam
-VITE_NOTES_API_KEY=jouw-projectnaam:jouw-api-key
+# NOVI Dynamic API – basis-URL en project-ID
+VITE_API_URL=https://novi-backend-api-wgsgz.ondigitalocean.app
+VITE_PROJECT_ID=8766124a-0f20-4bf9-a5ba-d261af524963
 ```
 
 > **Let op:** het `.env`-bestand staat in `.gitignore` en wordt nooit mee gecommit.
-> De API-key wordt als losse bijlage aangeleverd bij de inlevering.
+> De API-key (project-ID) wordt als losse bijlage aangeleverd bij de inlevering.
 
 ### 4. Applicatie starten
 
@@ -103,12 +99,13 @@ De app is bereikbaar op **http://localhost:5173** (Vite kiest automatisch een vr
 
 ## Testgebruikers
 
-Maak via de **Registreren**-tab op de loginpagina zelf een account aan.
+De volgende testgebruiker is aangemaakt via `lyst-config.json` en beschikbaar in de NOVI Dynamic API:
 
-Vereisten voor het NOVI backend account:
-- **Gebruikersnaam:** minimaal 6 tekens
-- **Wachtwoord:** minimaal 6 tekens
-- **E-mailadres:** geldig formaat (bijv. `naam@domein.nl`)
+| E-mailadres   | Wachtwoord |
+|---------------|------------|
+| test@lyst.nl  | test123    |
 
-> De NOVI Educational Backend wist de database periodiek.
-> Maak indien nodig opnieuw een account aan.
+Via de **Registreren**-tab op de loginpagina kun je ook zelf een nieuw account aanmaken.
+
+> De NOVI Dynamic API wist de database dagelijks.
+> Maak indien nodig opnieuw een account aan of gebruik de testgebruiker hierboven.
