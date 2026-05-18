@@ -57,7 +57,8 @@ export default function Reminders() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const now  = new Date()
-  const today = notes.filter((n) => {
+  const overdue = notes.filter((n) => new Date(n.reminder) < startOfDay(now))
+  const today   = notes.filter((n) => {
     const d = new Date(n.reminder)
     return d >= startOfDay(now) && d <= endOfDay(now)
   })
@@ -70,7 +71,7 @@ export default function Reminders() {
     return d > endOfWeek(now)
   })
 
-  const totalActive = today.filter((r) => !done[r.id]).length + week.length + later.length
+  const totalActive = today.filter((r) => !done[r.id]).length + week.length + later.length + overdue.length
 
   function toggleDone(id) {
     setDone((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -98,6 +99,41 @@ export default function Reminders() {
 
         <div className="reminders-content">
           {error && <div className="error-banner">{error}</div>}
+
+          {/* Verlopen */}
+          {overdue.length > 0 && (
+            <>
+              <div className="reminders-section-header">
+                <div className="section-icon" style={{ backgroundColor: '#6B727F' }}>
+                  <Bell size={14} color="white" />
+                </div>
+                <span className="section-title" style={{ color: 'var(--text-sec)' }}>Verlopen</span>
+                <span className="section-count">{overdue.length} reminders</span>
+              </div>
+              {overdue.map((rem) => {
+                const lblColor = rem.labels[0]?.color || 'var(--text-sec)'
+                return (
+                  <div key={rem.id} className="reminder-card done" onClick={() => navigate(`/notitie/${rem.id}`)}>
+                    <div className="reminder-checkbox" />
+                    <div className="reminder-info">
+                      <div className="reminder-title done">{rem.title}</div>
+                      {rem.labels[0] && (
+                        <div className="reminder-label-row">
+                          <span className="reminder-label-dot" style={{ backgroundColor: lblColor }} />
+                          <span className="reminder-label-name">{rem.labels[0].name}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="reminder-time-badge" style={{ color: 'var(--text-sec)', background: 'var(--input-bg)' }}>
+                      <Bell size={12} />
+                      {formatReminder(rem.reminder)}
+                    </div>
+                  </div>
+                )
+              })}
+              <hr className="section-divider" />
+            </>
+          )}
 
           {/* Vandaag */}
           <div className="reminders-section-header">
