@@ -72,6 +72,8 @@ export default function Filter() {
       .finally(() => setLoading(false))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const hasActiveFilters = activeLabel !== 'Alle labels' || activeDate !== 'Alle datums' || query
+
   const results = notes
     .filter((n) => activeLabel === 'Alle labels' || n.labels.some((l) => l.name === activeLabel))
     .filter((n) => {
@@ -184,7 +186,7 @@ export default function Filter() {
 
               {results.length === 0 ? (
                 <div className="loading-state">
-                  <span>Geen notities gevonden voor deze filters.</span>
+                  <span>{hasActiveFilters ? 'Geen notities gevonden voor deze filters.' : 'Nog geen notities aangemaakt.'}</span>
                 </div>
               ) : (
                 results.map((note) => {
