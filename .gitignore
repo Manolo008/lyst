@@ -13,6 +13,12 @@ dist-ssr
 *.local
 .env
 
+# Assignment documents (not part of the codebase)
+docs/*.pdf
+docs/*.docx
+docs/*.md
+opdracht/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -47,8 +47,8 @@ Geen Bootstrap, Tailwind of andere styling-frameworks.
 ### 1. Repository klonen
 
 ```bash
-git clone https://github.com/jouw-gebruikersnaam/lysta.git
-cd lysta
+git clone https://github.com/Manolo008/lyst.git
+cd lyst
 ```
 
 ### 2. Dependencies installeren
