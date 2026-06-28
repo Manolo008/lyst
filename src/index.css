@@ -1,33 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary: #1C3A2E;
-  --primary-mid: #2C5543;
-  --primary-light: #4A8B6F;
-  --accent: #56BC8D;
-  --bg: #F5F5F2;
+  --primary: #1c3a2e;
+  --primary-mid: #2c5543;
+  --primary-light: #4a8b6f;
+  --accent: #56bc8d;
+  --bg: #f5f5f2;
   --white: #ffffff;
-  --text: #1A1B1E;
-  --text-sec: #6B727F;
-  --border: #E0E0E0;
-  --input-bg: #F5F5F5;
-  --red: #EF4444;
-  --blue: #3B82F6;
-  --yellow: #FBC003;
-  --purple: #9644EF;
-  --green: #22C55E;
-  --orange: #FA7725;
-  --nav-text: #B2D9C6;
+  --text: #1a1b1e;
+  --text-sec: #6b727f;
+  --border: #e0e0e0;
+  --input-bg: #f5f5f5;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --yellow: #fbc003;
+  --purple: #9644ef;
+  --green: #22c55e;
+  --orange: #fa7725;
+  --nav-text: #b2d9c6;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background: var(--bg);
   color: var(--text);
   height: 100vh;
@@ -41,7 +47,11 @@ body {
 }
 
 /* ── Spinner & feedback ── */
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .spinner {
   width: 32px;
@@ -65,9 +75,9 @@ body {
 }
 
 .error-banner {
-  background: #FEE2E2;
+  background: #fee2e2;
   color: var(--red);
-  border: 1px solid rgba(239,68,68,0.25);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 13px;
@@ -75,9 +85,9 @@ body {
 }
 
 .success-banner {
-  background: #D1FAE5;
-  color: #065F46;
-  border: 1px solid rgba(16,185,129,0.25);
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 13px;
@@ -314,7 +324,9 @@ body {
   flex-shrink: 0;
 }
 
-.btn:hover { opacity: 0.85; }
+.btn:hover {
+  opacity: 0.85;
+}
 
 .btn-primary {
   background: var(--primary);
@@ -334,7 +346,7 @@ body {
 }
 
 .btn-danger {
-  background: #FEE2E2;
+  background: #fee2e2;
   color: var(--red);
   border-radius: 8px;
 }
@@ -402,7 +414,9 @@ body {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   overflow: hidden;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
 }
 
 .note-card:hover {
@@ -621,14 +635,65 @@ body {
   border-color: var(--primary-light);
 }
 
-.forgot-link {
+.remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -4px;
+  margin-bottom: 20px;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-sec);
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.remember-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--input-bg);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.remember-checkbox:checked + .remember-box {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.remember-checkbox:checked + .remember-box::after {
+  content: '';
   display: block;
-  text-align: right;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.forgot-link {
   font-size: 12px;
   color: var(--primary-light);
   text-decoration: none;
-  margin-top: -8px;
-  margin-bottom: 20px;
   cursor: pointer;
 }
 
@@ -1128,7 +1193,7 @@ body {
 }
 
 .reminder-time-badge.today {
-  background: #FFF3E8;
+  background: #fff3e8;
   color: var(--orange);
 }
 

@@ -3,7 +3,10 @@ import { Bookmark, Bell } from 'lucide-react'
 export default function NoteCard({ note, onClick }) {
   return (
     <div className="note-card" onClick={onClick}>
-      <div className="note-card-accent" style={{ backgroundColor: note.accent || note.labels?.[0]?.color || '#6B727F' }} />
+      <div
+        className="note-card-accent"
+        style={{ backgroundColor: note.accent || note.labels?.[0]?.color || '#6B727F' }}
+      />
       <div className="note-card-body">
         {note.pinned && (
           <span className="note-card-pin">

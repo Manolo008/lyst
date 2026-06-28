@@ -23,8 +23,8 @@
   "users": [
     {
       "id": 1,
-      "email":    "test@lyst.nl",
-      "password": "test123",
+      "email":    "melchior.buddingh@lyst.com",
+      "password": "Lyst2026!",
       "roles":    ["user"]
     }
   ]
