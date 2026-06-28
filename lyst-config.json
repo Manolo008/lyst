@@ -1,0 +1,31 @@
+{
+  "collections": [
+    {
+      "name": "notes",
+      "fields": [
+        { "name": "id",       "type": "number",  "required": true  },
+        { "name": "title",    "type": "string",  "required": true  },
+        { "name": "body",     "type": "string",  "required": false },
+        { "name": "labels",   "type": "string",  "required": false },
+        { "name": "pinned",   "type": "boolean", "required": false },
+        { "name": "reminder", "type": "string",  "required": false },
+        { "name": "accent",   "type": "string",  "required": false }
+      ],
+      "permissions": {
+        "GET":    ["user"],
+        "POST":   ["user"],
+        "PUT":    ["user"],
+        "PATCH":  ["user"],
+        "DELETE": ["user"]
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email":    "test@lyst.nl",
+      "password": "test123",
+      "roles":    ["user"]
+    }
+  ]
+}

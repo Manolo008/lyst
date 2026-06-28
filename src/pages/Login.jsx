@@ -15,7 +15,6 @@ export default function Login() {
   const navigate = useNavigate()
 
   const [tab,      setTab]      = useState('login')
-  const [username, setUsername] = useState('')
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
   const [error,    setError]    = useState('')
@@ -30,10 +29,9 @@ export default function Login() {
     setLoading(true)
     try {
       if (tab === 'login') {
-        await login(username, password)
+        await login(email, password)
       } else {
-        if (!email) { setError('Vul een e-mailadres in.'); setLoading(false); return }
-        await register(username, email, password)
+        await register(email, password)
       }
       navigate('/dashboard')
     } catch (err) {
@@ -79,31 +77,16 @@ export default function Login() {
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Gebruikersnaam</label>
+              <label className="form-label">E-mailadres</label>
               <input
                 className="form-input"
-                type="text"
-                placeholder="minimaal 6 tekens"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                placeholder="jouw@email.nl"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                minLength={6}
               />
             </div>
-
-            {tab === 'register' && (
-              <div className="form-group">
-                <label className="form-label">E-mailadres</label>
-                <input
-                  className="form-input"
-                  type="email"
-                  placeholder="jouw@email.nl"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            )}
 
             <div className="form-group">
               <label className="form-label">Wachtwoord</label>

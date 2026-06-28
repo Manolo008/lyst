@@ -1,39 +1,32 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import { signin, signup, getProfile } from '../api/auth'
+import { createContext, useContext, useState } from 'react'
+import { signin, signup } from '../api/auth'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user,    setUser]    = useState(null)
-  const [token,   setToken]   = useState(() => localStorage.getItem('lyst_token'))
-  const [loading, setLoading] = useState(!!localStorage.getItem('lyst_token'))
+  const [token, setToken] = useState(() => localStorage.getItem('lyst_token'))
+  const [user,  setUser]  = useState(() => {
+    const saved = localStorage.getItem('lyst_user')
+    return saved ? JSON.parse(saved) : null
+  })
 
-  // Herstel sessie bij page refresh
-  useEffect(() => {
-    if (!token) { setLoading(false); return }
-    getProfile(token)
-      .then(setUser)
-      .catch(() => logout())
-      .finally(() => setLoading(false))
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function login(username, password) {
-    const data = await signin({ username, password })
-    const jwt = data.accessToken
+  async function login(email, password) {
+    const data = await signin({ email, password })
+    const jwt  = data.accessToken
     localStorage.setItem('lyst_token', jwt)
+    localStorage.setItem('lyst_user',  JSON.stringify(data.user ?? { email }))
     setToken(jwt)
-    const profile = await getProfile(jwt)
-    setUser(profile)
-    return profile
+    setUser(data.user ?? { email })
   }
 
-  async function register(username, email, password) {
-    await signup({ username, email, password })
-    return login(username, password)
+  async function register(email, password) {
+    await signup({ email, password })
+    return login(email, password)
   }
 
   function logout() {
     localStorage.removeItem('lyst_token')
+    localStorage.removeItem('lyst_user')
     setToken(null)
     setUser(null)
   }
@@ -45,14 +38,6 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
-  }
-
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div className="spinner" />
-      </div>
-    )
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -7,7 +7,6 @@ import NoteCard      from '../components/NoteCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useAuth }   from '../context/AuthContext'
 import { fetchNotes } from '../api/notes'
-import { NOTES }     from '../data'
 
 const CHIPS = ['Alle', 'Gepind', 'Werk', 'Persoonlijk', 'Ideeën', 'Urgent']
 
@@ -42,10 +41,8 @@ export default function Dashboard() {
         accent:  n.accent || '#6B727F',
       }))
       setNotes(normalized)
-    } catch {
-      // Fallback op mock data wanneer API nog niet geconfigureerd is
-      setNotes(NOTES)
-      setError('API niet bereikbaar – mockdata getoond. Configureer VITE_NOTES_API_URL in .env')
+    } catch (err) {
+      setError(err.message || 'Notities ophalen mislukt. Probeer opnieuw.')
     } finally {
       setLoading(false)
     }

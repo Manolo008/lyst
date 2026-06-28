@@ -1,10 +1,18 @@
-const BASE = import.meta.env.VITE_AUTH_URL || 'https://frontend-educational-backend.herokuapp.com'
+const BASE       = import.meta.env.VITE_API_URL
+const PROJECT_ID = import.meta.env.VITE_PROJECT_ID
 
-export async function signup({ username, email, password }) {
-  const res = await fetch(`${BASE}/api/auth/signup`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password, role: ['user'] }),
+function baseHeaders() {
+  return {
+    'Content-Type':              'application/json',
+    'novi-education-project-id': PROJECT_ID,
+  }
+}
+
+export async function signup({ email, password }) {
+  const res = await fetch(`${BASE}/api/users`, {
+    method:  'POST',
+    headers: baseHeaders(),
+    body:    JSON.stringify({ email, password, roles: ['user'] }),
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
@@ -13,33 +21,13 @@ export async function signup({ username, email, password }) {
   return res.json()
 }
 
-export async function signin({ username, password }) {
-  const res = await fetch(`${BASE}/api/auth/signin`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+export async function signin({ email, password }) {
+  const res = await fetch(`${BASE}/api/login`, {
+    method:  'POST',
+    headers: baseHeaders(),
+    body:    JSON.stringify({ email, password }),
   })
-  if (!res.ok) throw new Error('Gebruikersnaam of wachtwoord is onjuist.')
-  return res.json() // { id, username, email, accessToken, tokenType }
-}
-
-export async function getProfile(token) {
-  const res = await fetch(`${BASE}/api/user`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  if (!res.ok) throw new Error('Kon profiel niet ophalen.')
-  return res.json() // { id, username, email, info, roles }
-}
-
-export async function updateProfile(token, data) {
-  const res = await fetch(`${BASE}/api/user`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  })
-  if (!res.ok) throw new Error('Kon profiel niet bijwerken.')
-  return res.json()
+  if (!res.ok) throw new Error('E-mailadres of wachtwoord is onjuist.')
+  const data = await res.json()
+  return { ...data, accessToken: data.token ?? data.accessToken }
 }
