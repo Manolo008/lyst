@@ -18,6 +18,7 @@ docs/*.pdf
 docs/*.docx
 docs/*.md
 opdracht/
+CHECKLIST.md
 
 # Editor directories and files
 .vscode/*
