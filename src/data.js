@@ -1,9 +1,9 @@
 export const LABELS = [
-  { name: 'Werk',        color: '#3B82F6' },
+  { name: 'Werk', color: '#3B82F6' },
   { name: 'Persoonlijk', color: '#9644EF' },
-  { name: 'Ideeën',      color: '#FBC003' },
-  { name: 'Urgent',      color: '#EF4444' },
-];
+  { name: 'Ideeën', color: '#FBC003' },
+  { name: 'Urgent', color: '#EF4444' },
+]
 
 export const NOTES = [
   {
@@ -69,7 +69,7 @@ export const NOTES = [
     date: '3 feb',
     accent: '#EF4444',
   },
-];
+]
 
 export const NOTE_DETAIL = {
   id: 1,
@@ -94,23 +94,63 @@ Sprint 11 – 1 t/m 15 april    Design system afronden
 Sprint 12 – 16 t/m 30 april   Frontend implementatie
 Sprint 13 – 1 t/m 15 mei      QA en bugfixes
 Sprint 14 – 16 t/m 31 mei     Go-live en monitoring`,
-};
+}
 
 export const REMINDERS = {
   today: [
-    { id: 1, title: 'Boodschappenlijst',  time: '18:00', label: 'Persoonlijk', color: '#9644EF', done: false },
-    { id: 2, title: 'Bellijst deze week', time: '10:00', label: 'Urgent',      color: '#EF4444', done: true  },
-    { id: 3, title: 'Stand-up notes',     time: '09:00', label: 'Werk',        color: '#3B82F6', done: false },
+    {
+      id: 1,
+      title: 'Boodschappenlijst',
+      time: '18:00',
+      label: 'Persoonlijk',
+      color: '#9644EF',
+      done: false,
+    },
+    {
+      id: 2,
+      title: 'Bellijst deze week',
+      time: '10:00',
+      label: 'Urgent',
+      color: '#EF4444',
+      done: true,
+    },
+    { id: 3, title: 'Stand-up notes', time: '09:00', label: 'Werk', color: '#3B82F6', done: false },
   ],
   week: [
-    { id: 4, title: 'Lyst feature wishlist', time: 'di 7 apr, 09:00', label: 'Ideeën', color: '#FBC003' },
-    { id: 5, title: 'Projectreview Q2',      time: 'do 9 apr, 14:00', label: 'Werk',   color: '#3B82F6' },
+    {
+      id: 4,
+      title: 'Lyst feature wishlist',
+      time: 'di 7 apr, 09:00',
+      label: 'Ideeën',
+      color: '#FBC003',
+    },
+    { id: 5, title: 'Projectreview Q2', time: 'do 9 apr, 14:00', label: 'Werk', color: '#3B82F6' },
   ],
-};
+}
 
 export const FILTER_NOTES = [
-  { id: 1, title: 'Projectplan Q2 2026',      body: 'Overzicht van alle deliverables voor het tweede kwartaal...', date: 'Vandaag' },
-  { id: 4, title: 'Meeting notes 12 feb',     body: 'Besproken: roadmap, prioriteiten voor sprint 12...',          date: '12 feb'  },
-  { id: 5, title: 'Lyst feature wishlist',    body: 'Dark mode, markdown support, samenwerken, tags, export...',   date: '5 feb'   },
-  { id: 7, title: 'Technische schuld – plan', body: 'Refactoring van de API laag, migratie naar TypeScript...',    date: '2 feb'   },
-];
+  {
+    id: 1,
+    title: 'Projectplan Q2 2026',
+    body: 'Overzicht van alle deliverables voor het tweede kwartaal...',
+    date: 'Vandaag',
+  },
+  {
+    id: 4,
+    title: 'Meeting notes 12 feb',
+    body: 'Besproken: roadmap, prioriteiten voor sprint 12...',
+    date: '12 feb',
+  },
+  {
+    id: 5,
+    title: 'Lyst feature wishlist',
+    body: 'Dark mode, markdown support, samenwerken, tags, export...',
+    date: '5 feb',
+  },
+  {
+    id: 7,
+    title: 'Technische schuld – plan',
+    body: 'Refactoring van de API laag, migratie naar TypeScript...',
+    date: '2 feb',
+  },
+]

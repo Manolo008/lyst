@@ -1,18 +1,18 @@
-const BASE       = import.meta.env.VITE_API_URL
+const BASE = import.meta.env.VITE_API_URL
 const PROJECT_ID = import.meta.env.VITE_PROJECT_ID
 
 function baseHeaders() {
   return {
-    'Content-Type':              'application/json',
+    'Content-Type': 'application/json',
     'novi-education-project-id': PROJECT_ID,
   }
 }
 
 export async function signup({ email, password }) {
   const res = await fetch(`${BASE}/api/users`, {
-    method:  'POST',
+    method: 'POST',
     headers: baseHeaders(),
-    body:    JSON.stringify({ email, password, roles: ['user'] }),
+    body: JSON.stringify({ email, password, roles: ['user'] }),
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
@@ -23,9 +23,9 @@ export async function signup({ email, password }) {
 
 export async function signin({ email, password }) {
   const res = await fetch(`${BASE}/api/login`, {
-    method:  'POST',
+    method: 'POST',
     headers: baseHeaders(),
-    body:    JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password }),
   })
   if (!res.ok) throw new Error('E-mailadres of wachtwoord is onjuist.')
   const data = await res.json()

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Plus } from 'lucide-react'
-import Sidebar       from '../components/Sidebar'
-import Topbar        from '../components/Topbar'
-import NoteCard      from '../components/NoteCard'
+import Sidebar from '../components/Sidebar'
+import Topbar from '../components/Topbar'
+import NoteCard from '../components/NoteCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { useAuth }   from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { fetchNotes } from '../api/notes'
 
 const CHIPS = ['Alle', 'Gepind', 'Werk', 'Persoonlijk', 'Ideeën', 'Urgent']
@@ -14,11 +14,11 @@ export default function Dashboard() {
   const { token, user } = useAuth()
   const navigate = useNavigate()
 
-  const [notes,      setNotes]      = useState([])
-  const [loading,    setLoading]    = useState(true)
-  const [error,      setError]      = useState('')
+  const [notes, setNotes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [activeChip, setActiveChip] = useState('Alle')
-  const [query,      setQuery]      = useState('')
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
     loadNotes()
@@ -31,14 +31,14 @@ export default function Dashboard() {
       const data = await fetchNotes(token)
       // Normaliseer API-response naar intern formaat
       const normalized = data.map((n) => ({
-        id:      n.id,
-        title:   n.title,
-        body:    n.body,
-        labels:  typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : (n.labels || []),
-        pinned:  n.pinned === true || n.pinned === 'true',
+        id: n.id,
+        title: n.title,
+        body: n.body,
+        labels: typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : n.labels || [],
+        pinned: n.pinned === true || n.pinned === 'true',
         reminder: n.reminder || null,
-        date:    new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
-        accent:  n.accent || '#6B727F',
+        date: new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
+        accent: n.accent || '#6B727F',
       }))
       setNotes(normalized)
     } catch (err) {
@@ -66,10 +66,7 @@ export default function Dashboard() {
     <div className="app-layout">
       <Sidebar />
       <div className="main-content">
-        <Topbar
-          title="Mijn Notities"
-          subtitle={`${notes.length} notities · ${pinnedCount} gepind`}
-        >
+        <Topbar title="Mijn Notities" subtitle={`${notes.length} notities · ${pinnedCount} gepind`}>
           <div className="search-field">
             <Search size={16} color="var(--text-sec)" />
             <input
@@ -103,7 +100,11 @@ export default function Dashboard() {
           ) : filtered.length === 0 ? (
             <div className="loading-state">
               <span>Geen notities gevonden.</span>
-              <button className="btn btn-primary" style={{ borderRadius: 8 }} onClick={() => navigate('/notitie/nieuw')}>
+              <button
+                className="btn btn-primary"
+                style={{ borderRadius: 8 }}
+                onClick={() => navigate('/notitie/nieuw')}
+              >
                 Eerste notitie aanmaken
               </button>
             </div>

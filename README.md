@@ -101,9 +101,9 @@ De app is bereikbaar op **http://localhost:5173** (Vite kiest automatisch een vr
 
 De volgende testgebruiker is aangemaakt via `lyst-config.json` en beschikbaar in de NOVI Dynamic API:
 
-| E-mailadres   | Wachtwoord |
-|---------------|------------|
-| test@lyst.nl  | test123    |
+| E-mailadres                  | Wachtwoord |
+|------------------------------|------------|
+| melchior.buddingh@lyst.com   | Lyst2026!  |
 
 Via de **Registreren**-tab op de loginpagina kun je ook zelf een nieuw account aanmaken.
 

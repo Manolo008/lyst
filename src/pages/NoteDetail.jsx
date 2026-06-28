@@ -1,45 +1,48 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Bell, Calendar, Trash2, Bookmark } from 'lucide-react'
-import Sidebar        from '../components/Sidebar'
-import Topbar         from '../components/Topbar'
+import Sidebar from '../components/Sidebar'
+import Topbar from '../components/Topbar'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { useAuth }    from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { fetchNote, createNote, updateNote, deleteNote } from '../api/notes'
 
 const LABEL_OPTIONS = [
-  { name: 'Werk',        color: '#3B82F6' },
+  { name: 'Werk', color: '#3B82F6' },
   { name: 'Persoonlijk', color: '#9644EF' },
-  { name: 'Ideeën',      color: '#FBC003' },
-  { name: 'Urgent',      color: '#EF4444' },
+  { name: 'Ideeën', color: '#FBC003' },
+  { name: 'Urgent', color: '#EF4444' },
 ]
 
 const EMPTY = { title: '', body: '', labels: [], pinned: false, reminder: '' }
 
 export default function NoteDetail() {
-  const { token }  = useAuth()
-  const { id }     = useParams()
-  const navigate   = useNavigate()
-  const isNew      = !id || id === 'nieuw'
+  const { token } = useAuth()
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const isNew = !id || id === 'nieuw'
 
-  const [note,    setNote]    = useState(EMPTY)
+  const [note, setNote] = useState(EMPTY)
   const [loading, setLoading] = useState(!isNew)
-  const [saving,  setSaving]  = useState(false)
-  const [error,   setError]   = useState('')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
     if (isNew) return
     fetchNote(token, id)
-      .then((data) => setNote({
-        title:   data.title   || '',
-        body:    data.body    || '',
-        labels:  typeof data.labels === 'string' ? JSON.parse(data.labels || '[]') : (data.labels || []),
-        pinned:  data.pinned === true || data.pinned === 'true',
-        reminder: data.reminder || '',
-        createdAt: data.createdAt,
-        modifiedAt: data.modifiedAt,
-      }))
+      .then((data) =>
+        setNote({
+          title: data.title || '',
+          body: data.body || '',
+          labels:
+            typeof data.labels === 'string' ? JSON.parse(data.labels || '[]') : data.labels || [],
+          pinned: data.pinned === true || data.pinned === 'true',
+          reminder: data.reminder || '',
+          createdAt: data.createdAt,
+          modifiedAt: data.modifiedAt,
+        })
+      )
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -59,8 +62,12 @@ export default function NoteDetail() {
   }
 
   async function handleSave() {
-    if (!note.title.trim()) { setError('Geef de notitie een titel.'); return }
-    setSaving(true); setError('')
+    if (!note.title.trim()) {
+      setError('Geef de notitie een titel.')
+      return
+    }
+    setSaving(true)
+    setError('')
     try {
       const payload = {
         ...note,
@@ -96,12 +103,14 @@ export default function NoteDetail() {
     return (
       <div className="app-layout">
         <Sidebar />
-        <div className="main-content"><LoadingSpinner message="Notitie laden..." /></div>
+        <div className="main-content">
+          <LoadingSpinner message="Notitie laden..." />
+        </div>
       </div>
     )
   }
 
-  const created  = note.createdAt  ? new Date(note.createdAt).toLocaleString('nl-NL')  : '—'
+  const created = note.createdAt ? new Date(note.createdAt).toLocaleString('nl-NL') : '—'
   const modified = note.modifiedAt ? new Date(note.modifiedAt).toLocaleString('nl-NL') : '—'
 
   return (
@@ -126,7 +135,7 @@ export default function NoteDetail() {
 
         <div className="detail-layout">
           <div className="editor-area">
-            {error   && <div className="error-banner">{error}</div>}
+            {error && <div className="error-banner">{error}</div>}
             {success && <div className="success-banner">{success}</div>}
 
             <input
@@ -150,17 +159,55 @@ export default function NoteDetail() {
                 </span>
               ))}
               <div style={{ position: 'relative' }}>
-                <button className="add-label-btn" onClick={(e) => { e.currentTarget.nextSibling.style.display = e.currentTarget.nextSibling.style.display === 'block' ? 'none' : 'block' }}>
+                <button
+                  className="add-label-btn"
+                  onClick={(e) => {
+                    e.currentTarget.nextSibling.style.display =
+                      e.currentTarget.nextSibling.style.display === 'block' ? 'none' : 'block'
+                  }}
+                >
                   + Label
                 </button>
-                <div style={{ display: 'none', position: 'absolute', top: 30, left: 0, background: 'white', border: '1px solid var(--border)', borderRadius: 8, padding: 8, zIndex: 10, minWidth: 140, boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}>
+                <div
+                  style={{
+                    display: 'none',
+                    position: 'absolute',
+                    top: 30,
+                    left: 0,
+                    background: 'white',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    padding: 8,
+                    zIndex: 10,
+                    minWidth: 140,
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                  }}
+                >
                   {LABEL_OPTIONS.map((lbl) => (
                     <div
                       key={lbl.name}
                       onClick={() => toggleLabel(lbl)}
-                      style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', cursor: 'pointer', fontSize: 13, borderRadius: 6, background: note.labels.some((l) => l.name === lbl.name) ? lbl.color + '15' : 'transparent' }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '6px 10px',
+                        cursor: 'pointer',
+                        fontSize: 13,
+                        borderRadius: 6,
+                        background: note.labels.some((l) => l.name === lbl.name)
+                          ? lbl.color + '15'
+                          : 'transparent',
+                      }}
                     >
-                      <span style={{ width: 10, height: 10, borderRadius: '50%', background: lbl.color }} />
+                      <span
+                        style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          background: lbl.color,
+                        }}
+                      />
                       {lbl.name}
                     </div>
                   ))}
@@ -169,7 +216,10 @@ export default function NoteDetail() {
               {note.reminder && (
                 <>
                   <span className="meta-divider" />
-                  <span className="reminder-badge"><Bell size={13} />{note.reminder}</span>
+                  <span className="reminder-badge">
+                    <Bell size={13} />
+                    {note.reminder}
+                  </span>
                 </>
               )}
             </div>
@@ -201,12 +251,27 @@ export default function NoteDetail() {
                   <div
                     key={lbl.name}
                     className="panel-label-chip"
-                    style={{ backgroundColor: active ? lbl.color + '1A' : 'var(--input-bg)', color: lbl.color, cursor: 'pointer', marginBottom: 6 }}
+                    style={{
+                      backgroundColor: active ? lbl.color + '1A' : 'var(--input-bg)',
+                      color: lbl.color,
+                      cursor: 'pointer',
+                      marginBottom: 6,
+                    }}
                     onClick={() => toggleLabel(lbl)}
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: lbl.color, display: 'inline-block' }} />
-                      <span style={{ fontSize: 13, fontWeight: active ? 600 : 400 }}>{lbl.name}</span>
+                      <span
+                        style={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: '50%',
+                          backgroundColor: lbl.color,
+                          display: 'inline-block',
+                        }}
+                      />
+                      <span style={{ fontSize: 13, fontWeight: active ? 600 : 400 }}>
+                        {lbl.name}
+                      </span>
                     </span>
                     {active && <span>✓</span>}
                   </div>
@@ -221,7 +286,15 @@ export default function NoteDetail() {
                   <Calendar size={15} color="var(--text)" />
                   <input
                     type="datetime-local"
-                    style={{ border: 'none', background: 'none', outline: 'none', fontSize: 12, fontFamily: 'inherit', color: 'var(--text)', width: '100%' }}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      outline: 'none',
+                      fontSize: 12,
+                      fontFamily: 'inherit',
+                      color: 'var(--text)',
+                      width: '100%',
+                    }}
                     value={note.reminder}
                     onChange={(e) => update('reminder', e.target.value)}
                   />
@@ -234,7 +307,11 @@ export default function NoteDetail() {
                 )}
               </div>
               {note.reminder && (
-                <button className="btn btn-outline-danger btn-full" style={{ fontSize: 12, height: 32 }} onClick={() => update('reminder', '')}>
+                <button
+                  className="btn btn-outline-danger btn-full"
+                  style={{ fontSize: 12, height: 32 }}
+                  onClick={() => update('reminder', '')}
+                >
                   Reminder wissen
                 </button>
               )}
@@ -251,12 +328,28 @@ export default function NoteDetail() {
                   style={{ background: note.pinned ? 'var(--primary)' : 'var(--border)' }}
                   onClick={() => update('pinned', !note.pinned)}
                 >
-                  <div className="toggle-knob" style={{ right: note.pinned ? 2 : undefined, left: note.pinned ? undefined : 2 }} />
+                  <div
+                    className="toggle-knob"
+                    style={{
+                      right: note.pinned ? 2 : undefined,
+                      left: note.pinned ? undefined : 2,
+                    }}
+                  />
                 </div>
               </div>
               {!isNew && (
                 <div className="panel-toggle-row">
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--red)', cursor: 'pointer' }} onClick={handleDelete}>
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      fontSize: 13,
+                      color: 'var(--red)',
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleDelete}
+                  >
                     <Trash2 size={16} color="var(--red)" /> Notitie verwijderen
                   </span>
                 </div>

@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Check } from 'lucide-react'
-import Sidebar        from '../components/Sidebar'
-import Topbar         from '../components/Topbar'
+import Sidebar from '../components/Sidebar'
+import Topbar from '../components/Topbar'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { useAuth }    from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { fetchNotes } from '../api/notes'
 
 const LABEL_FILTERS = [
   { name: 'Alle labels', color: 'var(--text-sec)' },
-  { name: 'Werk',        color: '#3B82F6' },
+  { name: 'Werk', color: '#3B82F6' },
   { name: 'Persoonlijk', color: '#9644EF' },
-  { name: 'Ideeën',      color: '#FBC003' },
-  { name: 'Urgent',      color: '#EF4444' },
+  { name: 'Ideeën', color: '#FBC003' },
+  { name: 'Urgent', color: '#EF4444' },
 ]
 
 const DATE_FILTERS = ['Vandaag', 'Deze week', 'Deze maand', 'Alle datums']
@@ -27,7 +27,7 @@ function isToday(dateStr) {
 
 function isThisWeek(dateStr) {
   if (!dateStr) return false
-  const d   = new Date(dateStr)
+  const d = new Date(dateStr)
   const now = new Date()
   const start = new Date(now)
   start.setDate(now.getDate() - now.getDay())
@@ -39,34 +39,36 @@ function isThisWeek(dateStr) {
 
 function isThisMonth(dateStr) {
   if (!dateStr) return false
-  const d   = new Date(dateStr)
+  const d = new Date(dateStr)
   const now = new Date()
   return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
 }
 
 export default function Filter() {
   const { token } = useAuth()
-  const navigate  = useNavigate()
+  const navigate = useNavigate()
 
-  const [notes,       setNotes]       = useState([])
-  const [loading,     setLoading]     = useState(true)
-  const [error,       setError]       = useState('')
+  const [notes, setNotes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [activeLabel, setActiveLabel] = useState('Alle labels')
-  const [activeDate,  setActiveDate]  = useState('Alle datums')
-  const [activeSort,  setActiveSort]  = useState('Nieuwste eerst')
-  const [query,       setQuery]       = useState('')
+  const [activeDate, setActiveDate] = useState('Alle datums')
+  const [activeSort, setActiveSort] = useState('Nieuwste eerst')
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
     fetchNotes(token)
       .then((data) => {
-        setNotes(data.map((n) => ({
-          id:        n.id,
-          title:     n.title,
-          body:      n.body,
-          labels:    typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : (n.labels || []),
-          createdAt: n.createdAt,
-          date:      new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
-        })))
+        setNotes(
+          data.map((n) => ({
+            id: n.id,
+            title: n.title,
+            body: n.body,
+            labels: typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : n.labels || [],
+            createdAt: n.createdAt,
+            date: new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
+          }))
+        )
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
@@ -77,8 +79,8 @@ export default function Filter() {
   const results = notes
     .filter((n) => activeLabel === 'Alle labels' || n.labels.some((l) => l.name === activeLabel))
     .filter((n) => {
-      if (activeDate === 'Vandaag')    return isToday(n.createdAt)
-      if (activeDate === 'Deze week')  return isThisWeek(n.createdAt)
+      if (activeDate === 'Vandaag') return isToday(n.createdAt)
+      if (activeDate === 'Deze week') return isThisWeek(n.createdAt)
       if (activeDate === 'Deze maand') return isThisMonth(n.createdAt)
       return true
     })
@@ -88,7 +90,7 @@ export default function Filter() {
       return n.title.toLowerCase().includes(q) || (n.body || '').toLowerCase().includes(q)
     })
     .sort((a, b) => {
-      if (activeSort === 'Alfabetisch')  return a.title.localeCompare(b.title)
+      if (activeSort === 'Alfabetisch') return a.title.localeCompare(b.title)
       if (activeSort === 'Oudste eerst') return new Date(a.createdAt) - new Date(b.createdAt)
       return new Date(b.createdAt) - new Date(a.createdAt)
     })
@@ -126,7 +128,12 @@ export default function Filter() {
                 >
                   <span
                     className="filter-option-dot"
-                    style={{ backgroundColor: lbl.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    style={{
+                      backgroundColor: lbl.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
                   >
                     {activeLabel === lbl.name && <Check size={8} color="white" strokeWidth={3} />}
                   </span>
@@ -161,7 +168,12 @@ export default function Filter() {
                 <button
                   className="btn btn-outline-danger btn-full"
                   style={{ height: 34, fontSize: 13 }}
-                  onClick={() => { setActiveLabel('Alle labels'); setActiveDate('Alle datums'); setActiveSort('Nieuwste eerst'); setQuery('') }}
+                  onClick={() => {
+                    setActiveLabel('Alle labels')
+                    setActiveDate('Alle datums')
+                    setActiveSort('Nieuwste eerst')
+                    setQuery('')
+                  }}
                 >
                   Filters wissen
                 </button>
@@ -186,7 +198,11 @@ export default function Filter() {
 
               {results.length === 0 ? (
                 <div className="loading-state">
-                  <span>{hasActiveFilters ? 'Geen notities gevonden voor deze filters.' : 'Nog geen notities aangemaakt.'}</span>
+                  <span>
+                    {hasActiveFilters
+                      ? 'Geen notities gevonden voor deze filters.'
+                      : 'Nog geen notities aangemaakt.'}
+                  </span>
                 </div>
               ) : (
                 results.map((note) => {
