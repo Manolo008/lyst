@@ -14,11 +14,12 @@ export default function Login() {
   const { isAuthenticated, login, register } = useAuth()
   const navigate = useNavigate()
 
-  const [tab,      setTab]      = useState('login')
-  const [email,    setEmail]    = useState('')
+  const [tab, setTab] = useState('login')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error,    setError]    = useState('')
-  const [loading,  setLoading]  = useState(false)
+  const [rememberMe, setRememberMe] = useState(true)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // Al ingelogd → direct naar dashboard
   if (isAuthenticated) return <Navigate to="/dashboard" replace />
@@ -29,7 +30,7 @@ export default function Login() {
     setLoading(true)
     try {
       if (tab === 'login') {
-        await login(email, password)
+        await login(email, password, rememberMe)
       } else {
         await register(email, password)
       }
@@ -69,8 +70,24 @@ export default function Login() {
           </div>
 
           <div className="login-tabs">
-            <button className={`login-tab${tab === 'login'    ? ' active' : ''}`} onClick={() => { setTab('login');    setError('') }}>Inloggen</button>
-            <button className={`login-tab${tab === 'register' ? ' active' : ''}`} onClick={() => { setTab('register'); setError('') }}>Registreren</button>
+            <button
+              className={`login-tab${tab === 'login' ? ' active' : ''}`}
+              onClick={() => {
+                setTab('login')
+                setError('')
+              }}
+            >
+              Inloggen
+            </button>
+            <button
+              className={`login-tab${tab === 'register' ? ' active' : ''}`}
+              onClick={() => {
+                setTab('register')
+                setError('')
+              }}
+            >
+              Registreren
+            </button>
           </div>
 
           {error && <div className="error-banner">{error}</div>}
@@ -102,7 +119,19 @@ export default function Login() {
             </div>
 
             {tab === 'login' && (
-              <span className="forgot-link">Wachtwoord vergeten?</span>
+              <div className="remember-row">
+                <label className="remember-label">
+                  <input
+                    type="checkbox"
+                    className="remember-checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <span className="remember-box" aria-hidden="true" />
+                  Onthoud mij
+                </label>
+                <span className="forgot-link">Wachtwoord vergeten?</span>
+              </div>
             )}
 
             <button
@@ -115,13 +144,28 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="login-divider"><hr /><span>of</span><hr /></div>
+          <div className="login-divider">
+            <hr />
+            <span>of</span>
+            <hr />
+          </div>
 
-          <div className="register-link" onClick={() => { setTab(tab === 'login' ? 'register' : 'login'); setError('') }}>
-            {tab === 'login'
-              ? <>Nog geen account? &nbsp;<strong>Registreer je gratis →</strong></>
-              : <>Al een account? &nbsp;<strong>Log in →</strong></>
-            }
+          <div
+            className="register-link"
+            onClick={() => {
+              setTab(tab === 'login' ? 'register' : 'login')
+              setError('')
+            }}
+          >
+            {tab === 'login' ? (
+              <>
+                Nog geen account? &nbsp;<strong>Registreer je gratis →</strong>
+              </>
+            ) : (
+              <>
+                Al een account? &nbsp;<strong>Log in →</strong>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,18 +1,20 @@
-const BASE       = import.meta.env.VITE_API_URL
+const BASE = import.meta.env.VITE_API_URL
 const PROJECT_ID = import.meta.env.VITE_PROJECT_ID
 
 function authHeaders(token) {
   return {
-    'Content-Type':               'application/json',
-    'novi-education-project-id':  PROJECT_ID,
-    Authorization:                `Bearer ${token}`,
+    'Content-Type': 'application/json',
+    'novi-education-project-id': PROJECT_ID,
+    Authorization: `Bearer ${token}`,
   }
 }
 
 async function handleResponse(res) {
   if (res.status === 401 || res.status === 403) {
-    localStorage.removeItem('lyst_token')
-    localStorage.removeItem('lyst_user')
+    ;['lyst_token', 'lyst_user'].forEach((k) => {
+      localStorage.removeItem(k)
+      sessionStorage.removeItem(k)
+    })
     window.location.href = '/'
     return
   }
@@ -40,25 +42,25 @@ export async function fetchNote(token, id) {
 
 export async function createNote(token, note) {
   const res = await fetch(`${BASE}/api/notes`, {
-    method:  'POST',
+    method: 'POST',
     headers: authHeaders(token),
-    body:    JSON.stringify(note),
+    body: JSON.stringify(note),
   })
   return handleResponse(res)
 }
 
 export async function updateNote(token, id, note) {
   const res = await fetch(`${BASE}/api/notes/${id}`, {
-    method:  'PUT',
+    method: 'PUT',
     headers: authHeaders(token),
-    body:    JSON.stringify(note),
+    body: JSON.stringify(note),
   })
   return handleResponse(res)
 }
 
 export async function deleteNote(token, id) {
   const res = await fetch(`${BASE}/api/notes/${id}`, {
-    method:  'DELETE',
+    method: 'DELETE',
     headers: authHeaders(token),
   })
   return handleResponse(res)
