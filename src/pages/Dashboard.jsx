@@ -11,7 +11,7 @@ import { fetchNotes } from '../api/notes'
 const CHIPS = ['Alle', 'Gepind', 'Werk', 'Persoonlijk', 'Ideeën', 'Urgent']
 
 export default function Dashboard() {
-  const { token, user } = useAuth()
+  const { token } = useAuth()
   const navigate = useNavigate()
 
   const [notes, setNotes] = useState([])
@@ -21,32 +21,31 @@ export default function Dashboard() {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    loadNotes()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function loadNotes() {
-    setLoading(true)
-    setError('')
-    try {
-      const data = await fetchNotes(token)
-      // Normaliseer API-response naar intern formaat
-      const normalized = data.map((n) => ({
-        id: n.id,
-        title: n.title,
-        body: n.body,
-        labels: typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : n.labels || [],
-        pinned: n.pinned === true || n.pinned === 'true',
-        reminder: n.reminder || null,
-        date: new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
-        accent: n.accent || '#6B727F',
-      }))
-      setNotes(normalized)
-    } catch (err) {
-      setError(err.message || 'Notities ophalen mislukt. Probeer opnieuw.')
-    } finally {
-      setLoading(false)
+    async function loadNotes() {
+      setLoading(true)
+      setError('')
+      try {
+        const data = await fetchNotes(token)
+        // Normaliseer API-response naar intern formaat
+        const normalized = data.map((n) => ({
+          id: n.id,
+          title: n.title,
+          body: n.body,
+          labels: typeof n.labels === 'string' ? JSON.parse(n.labels || '[]') : n.labels || [],
+          pinned: n.pinned === true || n.pinned === 'true',
+          reminder: n.reminder || null,
+          date: new Date(n.createdAt || Date.now()).toLocaleDateString('nl-NL'),
+          accent: n.accent || '#6B727F',
+        }))
+        setNotes(normalized)
+      } catch (err) {
+        setError(err.message || 'Notities ophalen mislukt. Probeer opnieuw.')
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    loadNotes()
+  }, [token])
 
   const filtered = notes.filter((note) => {
     const matchChip =
